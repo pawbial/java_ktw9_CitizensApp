@@ -21,6 +21,8 @@ public class PersonReader {
     public List<Person> readPersonSetFromCSV() {
         List<Person> personList = new ArrayList<Person>();
         CSVReader reader = null;
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
             reader = reader = new CSVReader(new FileReader(fileLocation), ',');
         } catch (FileNotFoundException e) {
@@ -29,9 +31,7 @@ public class PersonReader {
         try {
             String[] nextLine;
             while ((nextLine = Objects.requireNonNull(reader).readNext()) != null) {
-                String pattern = "yyyy-MM-dd";
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-                Date date = new SimpleDateFormat(pattern).parse(nextLine[4]);
+                Date date = simpleDateFormat.parse(nextLine[4]);
                 Person person = new Person();
                 person.setId(Integer.parseInt(nextLine[0]));
                 person.setName(nextLine[1]);
