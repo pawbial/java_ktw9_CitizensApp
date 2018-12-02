@@ -8,8 +8,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public class PersonReader {
 
@@ -27,16 +29,21 @@ public class PersonReader {
         try {
             String[] nextLine;
             while ((nextLine = Objects.requireNonNull(reader).readNext()) != null) {
+                String pattern = "yyyy-MM-dd";
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                Date date = new SimpleDateFormat(pattern).parse(nextLine[4]);
                 Person person = new Person();
                 person.setId(Integer.parseInt(nextLine[0]));
                 person.setName(nextLine[1]);
                 person.setLastName(nextLine[2]);
                 person.setSex(nextLine[3]);
-                person.setBirthDate(new Date(String.valueOf(new SimpleDateFormat("yyyy-MM-dd"))));
+                person.setBirthDate(date);
                 personList.add(person);
             }
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return personList;

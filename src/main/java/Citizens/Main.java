@@ -11,11 +11,7 @@ public class Main {
         PersonReader personReader = new PersonReader();
         CitizenApplication citizenApplication = new CitizenApplication();
 
-//        try {
-//            citizenApplication.countLastNames(personReader.readPersonSetFromCSV());
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        citizenApplication.countLastNames(personReader.readPersonSetFromCSV());
 
         citizenApplication.getRandomDate(personReader.readPersonSetFromCSV());
     }
