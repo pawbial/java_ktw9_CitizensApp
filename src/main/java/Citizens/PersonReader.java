@@ -15,10 +15,10 @@ import java.util.Objects;
 
 public class PersonReader {
 
-    private String fileLocation = "C:\\Users\\Użytkownik\\Desktop\\scource\\Zadania dodatkowe\\CitizenApp\\src\\main\\resources\\person.csv";
+    private String fileLocation = "C:\\Users\\Użytkownik\\Desktop\\source\\Zadania dodatkowe\\CitizenApp\\src\\main\\resources\\person.csv";
 
 
-    public List<Person> readPersonSetFromCSV() {
+    public List<Person> readPersonListFromCSV() {
         List<Person> personList = new ArrayList<Person>();
         CSVReader reader = null;
         String pattern = "yyyy-MM-dd";

@@ -1,8 +1,10 @@
 package Citizens;
 
 import Citizens.Model.CitizenApplication;
+import Citizens.Model.Person;
 
-import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -11,9 +13,9 @@ public class Main {
         PersonReader personReader = new PersonReader();
         CitizenApplication citizenApplication = new CitizenApplication();
 
-        citizenApplication.countLastNames(personReader.readPersonSetFromCSV());
 
-        citizenApplication.getRandomDate(personReader.readPersonSetFromCSV());
+        Map<String, List<Person>> stringListMap = citizenApplication.countFirstNames(personReader.readPersonListFromCSV());
+
     }
 
 
