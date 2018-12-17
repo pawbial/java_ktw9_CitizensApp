@@ -71,4 +71,11 @@ public class Person {
 
         this.birthDate = birthDate;
     }
+
+
+    @Override
+    public String toString() {
+
+        return name + " " + lastName + " " + "ID: " + id;
+    }
 }

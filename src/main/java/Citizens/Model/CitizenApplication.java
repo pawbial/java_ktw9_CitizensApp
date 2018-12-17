@@ -2,8 +2,6 @@ package Citizens.Model;
 
 import Citizens.PersonReader;
 
-import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -12,6 +10,39 @@ import java.util.stream.Collectors;
 public class CitizenApplication {
 
     private PersonReader personReader = new PersonReader();
+
+
+
+    public void execute () {
+
+        List<Person> people = personReader.readPersonListFromCSV();
+
+        Map<String, Long> countLastNames = countLastNames(people);
+
+        for (Map.Entry<String, Long> nameCount : countLastNames.entrySet()) {
+           System.out.println("There are " + nameCount.getValue() + " persons with last name " + nameCount.getKey());
+       }
+
+        System.out.println("===================================");
+
+
+        Map<String, List<Person>> firstNames = countFirstNames(people);
+
+        for (Map.Entry<String, List<Person>> names : firstNames.entrySet()) {
+            System.out.println("This is a complete list of all persons with name: " + names.getKey() + "   LIST { " + names.getValue() + " }"  );
+        }
+
+        System.out.println("===========================================");
+
+        Long result = sortByAge(people);
+        System.out.println("There are " + result + " people between 35 and 55 years age");
+
+    }
+
+
+
+
+
 
 
     public Map<String, Long> countLastNames(List<Person> people) {
@@ -69,11 +100,11 @@ public class CitizenApplication {
         String pattern = "yyyy-MM-dd";
         LocalDate older = LocalDate.now().minusYears(55L);
         LocalDate younger = LocalDate.now().minusYears(35L);
-        Date oldetThan = java.sql.Date.valueOf(older);
+        Date olderThan = java.sql.Date.valueOf(older);
         Date youngerThan = java.sql.Date.valueOf(younger);
 
         return people.stream()
-                .filter(x -> x.getBirthDate().after(oldetThan))
+                .filter(x -> x.getBirthDate().after(olderThan))
                 .filter(x -> x.getBirthDate().before(youngerThan))
                 .count();
     }

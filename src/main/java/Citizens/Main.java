@@ -10,11 +10,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        PersonReader personReader = new PersonReader();
         CitizenApplication citizenApplication = new CitizenApplication();
 
+        citizenApplication.execute();
 
-        Map<String, List<Person>> stringListMap = citizenApplication.countFirstNames(personReader.readPersonListFromCSV());
 
     }
 
