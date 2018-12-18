@@ -15,7 +15,10 @@ public class CitizenApplication {
 
     public void execute () {
 
+        Long start = System.currentTimeMillis();
+
         List<Person> people = personReader.readPersonListFromCSV();
+
 
         Map<String, Long> countLastNames = countLastNames(people);
 
@@ -23,7 +26,10 @@ public class CitizenApplication {
            System.out.println("There are " + nameCount.getValue() + " persons with last name " + nameCount.getKey());
        }
 
-        System.out.println("===================================");
+       Long stop = System.currentTimeMillis() - start;
+        System.out.println("countLastNames time is: " + stop);
+
+        System.out.println("===========================================");
 
 
         Map<String, List<Person>> firstNames = countFirstNames(people);
@@ -32,32 +38,50 @@ public class CitizenApplication {
             System.out.println("This is a complete list of all persons with name: " + names.getKey() + "   LIST { " + names.getValue() + " }"  );
         }
 
+        Long stop2 = System.currentTimeMillis() - start;
+        System.out.println("countFirstNames time is: " + stop2);
+
         System.out.println("===========================================");
 
         Long result = sortByAge(people);
         System.out.println("There are " + result + " people between 35 and 55 years age");
 
+        Long stop3 = System.currentTimeMillis() - start;
+        System.out.println("sortByAge time is: " + stop3);
+
+        System.out.println("===========================================");
     }
 
 
 
 
-
+// return listOfString.stream().filter(x -> x.startsWith("Level")).collect(Collectors.groupingBy(x -> Long.valueOf(x.charAt(6))));
 
 
     public Map<String, Long> countLastNames(List<Person> people) {
         people = personReader.readPersonListFromCSV();
-        Map<String, Long> countLastNames = new HashMap<>();
-        for (Person person : people) {
-            String lastName = person.getLastName();
-            Long sameLastNameCount = countLastNames.getOrDefault(lastName, 0L);
-            sameLastNameCount++;
-            countLastNames.put(lastName, sameLastNameCount);
+        Map<String, Long> countedLastNames = new HashMap<>();
 
+        List<String> lastNames = people.stream().map(Person::getLastName).distinct().collect(Collectors.toList());
+
+        for (int i = 0; i < lastNames.size(); i++) {
+            int finalI = i;
+            Long count = people.stream().filter(x -> x.getLastName().equals(lastNames.get(finalI))).count();
+            countedLastNames.put(lastNames.get(finalI),count);
         }
-
-        return countLastNames;
+        return countedLastNames;
     }
+//              Twój jest szybszy o 0.8 sek :/
+//
+//        for (Person person : people) {
+//            String name = person.getName();
+//            Long peopleWithTheSameNameCount = countedLastNames.getOrDefault(name, 0L);
+//            peopleWithTheSameNameCount++;
+//            countedLastNames.put(name, peopleWithTheSameNameCount);
+//        }
+//        return countedLastNames;
+//
+//    }
 
 
     public Map <String, List <Person>> countFirstNames(List<Person> people) {
