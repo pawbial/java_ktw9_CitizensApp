@@ -22,40 +22,36 @@ public class CitizenApplication {
 
         Map<String, Long> countLastNames = countLastNames(people);
 
-        for (Map.Entry<String, Long> nameCount : countLastNames.entrySet()) {
-           System.out.println("There are " + nameCount.getValue() + " persons with last name " + nameCount.getKey());
-       }
+//        for (Map.Entry<String, Long> nameCount : countLastNames.entrySet()) {
+//           System.out.println("There are " + nameCount.getValue() + " persons with last name " + nameCount.getKey());
+//       }
 
-       Long stop = System.currentTimeMillis() - start;
+       long stop = System.currentTimeMillis() - start;
         System.out.println("countLastNames time is: " + stop);
 
         System.out.println("===========================================");
 
-
+        long start2 = System.currentTimeMillis();
         Map<String, List<Person>> firstNames = countFirstNames(people);
 
-        for (Map.Entry<String, List<Person>> names : firstNames.entrySet()) {
-            System.out.println("This is a complete list of all persons with name: " + names.getKey() + "   LIST { " + names.getValue() + " }"  );
-        }
+//        for (Map.Entry<String, List<Person>> names : firstNames.entrySet()) {
+//            System.out.println("This is a complete list of all persons with name: " + names.getKey() + "   LIST { " + names.getValue() + " }"  );
+//        }
 
-        Long stop2 = System.currentTimeMillis() - start;
+        long stop2 = System.currentTimeMillis() - start2;
         System.out.println("countFirstNames time is: " + stop2);
 
         System.out.println("===========================================");
 
+        long start3 = System.currentTimeMillis();
         Long result = sortByAge(people);
-        System.out.println("There are " + result + " people between 35 and 55 years age");
+//        System.out.println("There are " + result + " people between 35 and 55 years age");
 
-        Long stop3 = System.currentTimeMillis() - start;
+        long stop3 = System.currentTimeMillis() - start3;
         System.out.println("sortByAge time is: " + stop3);
 
         System.out.println("===========================================");
     }
-
-
-
-
-// return listOfString.stream().filter(x -> x.startsWith("Level")).collect(Collectors.groupingBy(x -> Long.valueOf(x.charAt(6))));
 
 
     public Map<String, Long> countLastNames(List<Person> people) {
