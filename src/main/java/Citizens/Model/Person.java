@@ -2,6 +2,7 @@ package Citizens.Model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class Person {
 
@@ -10,19 +11,25 @@ public class Person {
     private String lastName;
     private String sex;
     private Date birthDate;
+    private List<Animal> pets;
 
 
-    public Person(Integer id, String name, String lastName, String sex, Date birthDate) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.sex = sex;
-        this.birthDate = birthDate;
+    private Person (Builder builder) {
+
+        id = builder.id;
+        name = builder.name;
+        lastName = builder.lastName;
+        sex = builder.sex;
+        birthDate = builder.birthDate;
+        pets = builder.pets;
     }
 
-    public Person () {
+    public static Builder builder () {
 
+        return new Builder();
     }
+
+
 
     public Integer getId() {
         return id;
@@ -73,10 +80,72 @@ public class Person {
         this.birthDate = birthDate;
     }
 
+    public List<Animal> getPets() {
+        return pets;
+    }
 
     @Override
     public String toString() {
 
-        return name + " " + lastName + " " + "ID: " + id;
+        return "{" + name + ",  " + lastName + ",  " + "ID: " + id + "}";
+    }
+
+    public static class Builder {
+
+
+        private Integer id;
+        private String name;
+        private String lastName;
+        private String sex;
+        private Date birthDate;
+        private List<Animal> pets;
+
+
+        public Person build () {
+
+            return new Person(this);
+        }
+
+        public Builder id (Integer id) {
+
+            this.id = id;
+
+            return this;
+        }
+
+        public Builder name (String name){
+
+            this.name = name;
+
+            return this;
+        }
+
+        public Builder lastName (String lastName) {
+
+            this.lastName = lastName;
+
+            return this;
+        }
+
+        public Builder sex (String sex) {
+
+            this.sex = sex;
+
+            return this;
+        }
+
+        public Builder birthDate (Date birthDate) {
+
+            this.birthDate = birthDate;
+
+            return this;
+        }
+
+        public Builder pets (List<Animal> pets) {
+
+            this.pets = pets;
+            return this;
+        }
+
     }
 }

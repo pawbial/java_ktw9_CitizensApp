@@ -1,5 +1,6 @@
 package Citizens.Model;
 
+import Citizens.AnimalReader;
 import Citizens.PersonReader;
 
 import java.text.SimpleDateFormat;
@@ -10,14 +11,17 @@ import java.util.stream.Collectors;
 public class CitizenApplication {
 
     private PersonReader personReader = new PersonReader();
+    private AnimalReader animalReader = new AnimalReader();
 
 
 
-    public void execute () {
+
+    public void execute() {
 
         Long start = System.currentTimeMillis();
 
         List<Person> people = personReader.readPersonListFromCSV();
+        List<Animal> animals = animalReader.readAnimalListFromCSV();
 
 
         Map<String, Long> countLastNames = countLastNames(people);
@@ -26,7 +30,7 @@ public class CitizenApplication {
 //           System.out.println("There are " + nameCount.getValue() + " persons with last name " + nameCount.getKey());
 //       }
 
-       long stop = System.currentTimeMillis() - start;
+        long stop = System.currentTimeMillis() - start;
         System.out.println("countLastNames time is: " + stop);
 
         System.out.println("===========================================");
@@ -51,6 +55,24 @@ public class CitizenApplication {
         System.out.println("sortByAge time is: " + stop3);
 
         System.out.println("===========================================");
+
+        long start4 = System.currentTimeMillis();
+
+        Long numOfRetired = countRetired(people);
+
+        System.out.println("There are " + numOfRetired + " people of retirement age");
+
+        long stop4 = System.currentTimeMillis() - start4;
+        System.out.println("countRetired time is: " + stop4);
+
+    }
+
+    public void executeTest () {
+
+        List<Person> people = personReader.readPersonListFromCSV();
+
+        showPets(people);
+
     }
 
 
@@ -63,7 +85,7 @@ public class CitizenApplication {
         for (int i = 0; i < lastNames.size(); i++) {
             int finalI = i;
             Long count = people.stream().filter(x -> x.getLastName().equals(lastNames.get(finalI))).count();
-            countedLastNames.put(lastNames.get(finalI),count);
+            countedLastNames.put(lastNames.get(finalI), count);
         }
         return countedLastNames;
     }
@@ -80,13 +102,13 @@ public class CitizenApplication {
 //    }
 
 
-    public Map <String, List <Person>> countFirstNames(List<Person> people) {
+    public Map<String, List<Person>> countFirstNames(List<Person> people) {
         Map<String, List<Person>> personsCountedByFirstName = new HashMap<>();
         Object[] firstNames = people.stream().map(Person::getName).map(String::toString).distinct().toArray();
         for (int i = 0; i < firstNames.length; i++) {
             int finalI = i;
             List<Person> personList = people.stream().filter(x -> x.getName().equals(firstNames[finalI])).collect(Collectors.toList());
-            personsCountedByFirstName.put(String.valueOf(firstNames[finalI]),personList);
+            personsCountedByFirstName.put(String.valueOf(firstNames[finalI]), personList);
         }
 
         return personsCountedByFirstName;
@@ -117,7 +139,6 @@ public class CitizenApplication {
 
     public Long sortByAge(List<Person> people) {
         people = personReader.readPersonListFromCSV();  // get all Persons method
-        String pattern = "yyyy-MM-dd";
         LocalDate older = LocalDate.now().minusYears(55L);
         LocalDate younger = LocalDate.now().minusYears(35L);
         Date olderThan = java.sql.Date.valueOf(older);
@@ -127,6 +148,27 @@ public class CitizenApplication {
                 .filter(x -> x.getBirthDate().after(olderThan))
                 .filter(x -> x.getBirthDate().before(youngerThan))
                 .count();
+    }
+
+    public Long countRetired(List<Person> people) {
+
+        LocalDate women = LocalDate.now().minusYears(60L);
+        LocalDate men = LocalDate.now().minusYears(65L);
+        Date womenRetDate = java.sql.Date.valueOf(women);
+        Date menRetDate = java.sql.Date.valueOf(men);
+
+        Long female = people.stream()
+                .filter(x -> x.getSex().equals("F"))
+                .filter(x -> x.getBirthDate().before(womenRetDate))
+                .count();
+
+        Long male = people.stream()
+                .filter(x -> x.getSex().equals("M"))
+                .filter(x -> x.getBirthDate().before(menRetDate))
+                .count();
+
+        return male + female;
+
     }
 
 
@@ -142,4 +184,29 @@ public class CitizenApplication {
 
 
     }
+
+    public void showPets (List <Person> people) {
+
+        people = personReader.readPersonListFromCSV();
+
+        for (int i = 0; i < people.size(); i++) {
+            Person person = people.get(i);
+            List<Animal> pets = person.getPets();
+            System.out.println(person + " " + pets);
+
+        }
+
+
+
+    }
+
+
+
+
+
+//    public Map <String, Integer> countAnimalByType (List <Animal> animals) {
+//
+//        animals.stream().map(Animal::getType).collect(Collectors.)
+//
+//    }
 }

@@ -1,5 +1,6 @@
 package Citizens;
 
+import Citizens.Model.Animal;
 import Citizens.Model.Person;
 import com.opencsv.CSVReader;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PersonReader {
 
@@ -19,34 +21,47 @@ public class PersonReader {
 
 
     public List<Person> readPersonListFromCSV() {
-        List<Person> personList = new ArrayList<Person>();
+        List<Animal> animals = getAnimals();
+        List<Person> personList = new ArrayList<>();
         CSVReader reader = null;
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            reader = reader = new CSVReader(new FileReader(fileLocation), ',');
+            reader = new CSVReader(new FileReader(fileLocation), ',');
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("File Not Found!");
         }
         try {
             String[] nextLine;
             while ((nextLine = Objects.requireNonNull(reader).readNext()) != null) {
                 Date date = simpleDateFormat.parse(nextLine[4]);
-                Person person = new Person();
-                person.setId(Integer.parseInt(nextLine[0]));
-                person.setName(nextLine[1]);
-                person.setLastName(nextLine[2]);
-                person.setSex(nextLine[3]);
-                person.setBirthDate(date);
+                Person.Builder builder = new Person.Builder();
+                builder.id(Integer.parseInt(nextLine[0]));
+                builder.name(nextLine[1]);
+                builder.lastName(nextLine[2]);
+                builder.sex(nextLine[3]);
+                builder.birthDate(date);
+                builder.pets(petIdMatch(Integer.parseInt(nextLine[0]),animals));
+                Person person = builder.build();
                 personList.add(person);
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("IO Exception!");
         } catch (ParseException e) {
-            e.printStackTrace();
+            System.out.println("Parse Exception!");
         }
         return personList;
+    }
+
+    private List<Animal> getAnimals() {
+        AnimalReader animalReader = new AnimalReader();
+        return animalReader.readAnimalListFromCSV();
+    }
+
+    private List<Animal> petIdMatch(Integer id, List<Animal> animals) {
+
+        return animals.stream().filter(x -> x.getId().equals(id)).collect(Collectors.toList());
     }
 
 }
