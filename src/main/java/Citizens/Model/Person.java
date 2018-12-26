@@ -1,6 +1,7 @@
 package Citizens.Model;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +25,23 @@ public class Person {
         pets = builder.pets;
     }
 
-    public static Builder builder () {
+    public static Builder builder (String name, String lastName, String sex, Date birthDate ){
 
+        if (name == null || name.length() < 2) {
+            throw new IllegalArgumentException("Name must have at least 2 characters");
+        }
+        if (lastName == null || lastName.length()<2)
+            throw new IllegalArgumentException("Last name must have at least 2 characters");
+        if (!(sex.equals("M") || sex.equals("F"))) {
+            throw new IllegalArgumentException("Sex must be defined");
+        }
+        LocalDate now = LocalDate.now();
+        Date present = java.sql.Date.valueOf(now);
+        LocalDate grownUp = LocalDate.now().minusYears(18L);
+        Date adult = java.sql.Date.valueOf(grownUp);
+        if (birthDate.after(present) || birthDate.after(adult)){
+            throw new IllegalArgumentException("Person must be over 18 years old");
+        }
         return new Builder();
     }
 

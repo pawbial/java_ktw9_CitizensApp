@@ -27,7 +27,7 @@ public class PersonReader {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         try {
-            reader = new CSVReader(new FileReader(fileLocation), ',');
+         reader = new CSVReader(new FileReader(fileLocation), ',');
         } catch (FileNotFoundException e) {
             System.out.println("File Not Found!");
         }
